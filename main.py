@@ -2,7 +2,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.adapter.inbound.api.router import router as api_router
+from app.adapter.inbound.api.v1_router import api_v1_router
+from app.common.exception.global_exception_handler import register_exception_handlers
 from app.infrastructure.config.settings import Settings, get_settings
 from app.infrastructure.database.database import engine, Base
 
@@ -18,7 +19,8 @@ async def lifespan(application: FastAPI):
 
 app = FastAPI(debug=settings.debug, lifespan=lifespan)
 
-app.include_router(api_router)
+app.include_router(api_v1_router)
+register_exception_handlers(app)
 
 
 @app.get("/")
